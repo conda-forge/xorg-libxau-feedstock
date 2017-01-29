@@ -23,5 +23,11 @@ configure_args=(
 make -j$CPU_COUNT
 make install
 make check
-rm -rf $PREFIX/share/doc/${PKG_NAME#xorg-}
-rm -f $PREFIX/lib/libXau.a $PREFIX/lib/libXau.la
+rm -rf $PREFIX/share/doc/${PKG_NAME#xorg-} $PREFIX/share/man
+
+# Prefer dynamic libraries to static, and dump libtool helper files
+for lib_ident in Xau; do
+    if [ -e $PREFIX/lib/lib${lib_ident}$SHLIB_EXT ] ; then
+        rm -f $PREFIX/lib/lib${lib_ident}.a $PREFIX/lib/lib${lib_ident}.la
+    fi
+done
