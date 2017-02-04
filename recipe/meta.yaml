@@ -20,7 +20,7 @@ build:
   features:
     - vc9  # [win and py27]
     - vc10  # [win and py34]
-    - vc14  # [win and py35]
+    - vc14  # [win and py>=35]
 
 requirements:
   build:
@@ -35,13 +35,13 @@ requirements:
     - toolchain
     - vc 9  # [win and py27]
     - vc 10  # [win and py34]
-    - vc 14  # [win and py35]
+    - vc 14  # [win and py>=35]
     - xorg-util-macros
     - xorg-xproto
   run:
     - vc 9  # [win and py27]
     - vc 10  # [win and py34]
-    - vc 14  # [win and py35]
+    - vc 14  # [win and py>=35]
 
 test:
   commands:
