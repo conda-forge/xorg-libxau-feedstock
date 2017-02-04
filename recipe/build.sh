@@ -48,10 +48,9 @@ make install
 make check
 rm -rf $uprefix/share/doc/${PKG_NAME#xorg-} $uprefix/share/man
 
-# Prefer dynamic libraries to static, and dump libtool helper files
-for lib_ident in Xau; do
-    #rm -f $uprefix/lib/lib${lib_ident}.la
-    if [ -e $uprefix/lib/lib${lib_ident}$SHLIB_EXT ] ; then
-        rm -f $uprefix/lib/lib${lib_ident}.a
-    fi
-done
+# Non-Windows: prefer dynamic libraries to static, and dump libtool helper files
+if [ -z "VS_MAJOR" ] ; then
+    for lib_ident in Xau; do
+        rm -f $uprefix/lib/lib${lib_ident}.la $uprefix/lib/lib${lib_ident}.a
+    done
+fi
