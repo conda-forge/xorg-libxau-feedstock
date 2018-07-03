@@ -14,14 +14,16 @@ Summary: A simple X Windows authentication protocol.
 Current build status
 ====================
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/xorg-libxau-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/xorg-libxau-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/xorg-libxau-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/xorg-libxau-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/xorg-libxau-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/xorg-libxau-feedstock/branch/master)
+[![Linux](https://img.shields.io/circleci/project/github/conda-forge/xorg-libxau-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/xorg-libxau-feedstock)
+[![OSX](https://img.shields.io/travis/conda-forge/xorg-libxau-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/xorg-libxau-feedstock)
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/xorg-libxau-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/xorg-libxau-feedstock/branch/master)
 
 Current release info
 ====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/xorg-libxau/badges/version.svg)](https://anaconda.org/conda-forge/xorg-libxau)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/xorg-libxau/badges/downloads.svg)](https://anaconda.org/conda-forge/xorg-libxau)
+
+| Name | Downloads | Version | Platforms |
+| --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-xorg--libxau-green.svg)](https://anaconda.org/conda-forge/xorg-libxau) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/xorg-libxau.svg)](https://anaconda.org/conda-forge/xorg-libxau) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/xorg-libxau.svg)](https://anaconda.org/conda-forge/xorg-libxau) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/xorg-libxau.svg)](https://anaconda.org/conda-forge/xorg-libxau) |
 
 Installing xorg-libxau
 ======================
@@ -66,6 +68,7 @@ To manage the continuous integration and simplify feedstock maintenance
 Using the ``conda-forge.yml`` within this repository, it is possible to re-render all of
 this feedstock's supporting files (e.g. the CI configuration files) with ``conda smithy rerender``.
 
+For more information please check the [conda-forge documentation](https://conda-forge.org/docs/).
 
 Terminology
 ===========
