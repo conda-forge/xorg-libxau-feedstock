@@ -49,7 +49,7 @@ make check
 rm -rf $uprefix/share/doc/${PKG_NAME#xorg-} $uprefix/share/man
 
 # Non-Windows: prefer dynamic libraries to static, and dump libtool helper files
-if [ -z "VS_MAJOR" ] ; then
+if [ -z "$CYGWIN_PREFIX" ] ; then
     for lib_ident in Xau; do
         rm -f $uprefix/lib/lib${lib_ident}.la $uprefix/lib/lib${lib_ident}.a
     done
