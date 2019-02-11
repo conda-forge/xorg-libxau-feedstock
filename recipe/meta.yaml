@@ -1,8 +1,8 @@
 {% set xorg_name = "libXau" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.0.8" %}
-{% set sha256 = "fdd477320aeb5cdd67272838722d6b7d544887dfe7de46e1e7cc0c27c2bea4f2" %}
+{% set version = "1.0.9" %}
+{% set sha256 = "ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec" %}
 {% set am_version = "1.15" %} # keep synchronized with build.sh
 
 package:
@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1006
+  number: 0
   detect_binary_files_with_prefix: true
 
 requirements:
