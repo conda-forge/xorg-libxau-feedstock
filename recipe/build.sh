@@ -1,5 +1,4 @@
 #! /bin/bash
-
 set -e
 set -x
 IFS=$' \t\n' # workaround for conda 4.2.13+toolchain bug
@@ -68,7 +67,9 @@ configure_args=(
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT
 make install
+if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
 make check
+fi
 rm -rf $uprefix/share/doc/${PKG_NAME#xorg-} $uprefix/share/man
 
 # Remove any new Libtool files we may have installed. It is intended that
