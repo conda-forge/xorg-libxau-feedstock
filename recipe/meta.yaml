@@ -1,8 +1,8 @@
 {% set xorg_name = "libXau" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.0.9" %}
-{% set sha256 = "ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec" %}
+{% set version = "1.0.11" %}
+{% set sha256 = "f3fa3282f5570c3f6bd620244438dbfbdd580fc80f02f549587a0f8ab329bbeb" %}
 {% set am_version = "1.15" %} # keep synchronized with build.sh
 
 package:
@@ -10,8 +10,7 @@ package:
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.bz2
-  url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.bz2
+  url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
 
 build:
@@ -26,18 +25,13 @@ requirements:
     - m2w64-pkg-config              # [win]
     - pkg-config                    # [not win]
     - posix                         # [win]
-    - gnuconfig  # [unix]
     - {{ compiler('c') }}           # [unix]
     - {{ compiler('m2w64_c') }}     # [win]
     - make                          # [unix]
-    - autoconf                      # [unix]
-    - automake                      # [unix]
     - gettext                       # [unix]
-    - libtool                       # [unix]
   host:
     - xorg-util-macros
     - xorg-xproto
-  run:
 
 test:
   commands:
