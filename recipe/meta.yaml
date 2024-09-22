@@ -35,7 +35,7 @@ requirements:
     - gettext                       # [unix]
   host:
     - xorg-util-macros
-    - xorg-xproto
+    - xorg-xorgproto
 
 test:
   commands:
