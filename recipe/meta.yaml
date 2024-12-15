@@ -1,9 +1,9 @@
 {% set xorg_name = "libXau" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.0.11" %}
-{% set sha256 = "f3fa3282f5570c3f6bd620244438dbfbdd580fc80f02f549587a0f8ab329bbeb" %}
-{% set am_version = "1.15" %} # keep synchronized with build.sh
+{% set version = "1.0.12" %}
+{% set sha256 = "74d0e4dfa3d39ad8939e99bda37f5967aba528211076828464d2777d477fc0fb" %}
+{% set am_version = "1.16" %} # keep synchronized with build.sh
 
 package:
   name: {{ name|lower }}
@@ -14,7 +14,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage(name|lower) }}
@@ -27,9 +27,9 @@ requirements:
     - m2-pkg-config                 # [win]
     - pkg-config                    # [not win]
     - m2-base                       # [win]
-    - {{ compiler('c') }}           # [unix]
+    - {{ compiler("c") }}           # [unix]
     - {{ stdlib("c") }}             # [unix]
-    - {{ compiler('m2w64_c') }}     # [win]
+    - {{ compiler("m2w64_c") }}     # [win]
     - {{ stdlib("m2w64_c") }}       # [win]
     - make
     - gettext                       # [unix]
