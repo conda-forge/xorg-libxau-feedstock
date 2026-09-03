@@ -1,5 +1,7 @@
 @echo on
 
+set "INCLUDE=%LIBRARY_INC%;%INCLUDE%"
+
 meson setup builddir %MESON_ARGS% --wrap-mode=nofallback --default-library=shared
 if errorlevel 1 exit /b 1
 
