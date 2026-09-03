@@ -74,7 +74,7 @@ index dc0c34b..4842c1f 100644
  
 -dep_xproto = dependency('xproto')
 +if host_machine.system() == 'windows'
-+  if not cc.has_header('X11/Xauth.h')
++  if not cc.has_header('X11/Xfuncproto.h')
 +    error('xproto headers not found')
 +  endif
 +  dep_xproto = declare_dependency()
