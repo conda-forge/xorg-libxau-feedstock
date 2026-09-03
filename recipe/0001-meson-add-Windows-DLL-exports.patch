@@ -54,7 +54,7 @@ index 73ed7d2..65ef25d 100644
  #endif
  
 diff --git a/meson.build b/meson.build
-index 5819c49..c9b9447 100644
+index dc0c34b..4842c1f 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -19,6 +19,10 @@ cc = meson.get_compiler('c')
@@ -68,7 +68,21 @@ index 5819c49..c9b9447 100644
  foreach f : ['explicit_bzero', 'explicit_memset', 'pathconf']
    if cc.has_function(f)
      lib_args += '-DHAVE_@0@'.format(f.to_upper())
-@@ -35,9 +39,11 @@ if get_option('xthreads')
+@@ -29,15 +33,24 @@ if cc.has_header('unistd.h')
+   lib_args += '-DHAVE_UNISTD_H'
+ endif
+ 
+-dep_xproto = dependency('xproto')
++if host_machine.system() == 'windows'
++  if not cc.has_header('X11/Xauth.h')
++    error('xproto headers not found')
++  endif
++  dep_xproto = declare_dependency()
++else
++  dep_xproto = dependency('xproto', version : '>= 7.0.17')
++endif
+ 
+ if get_option('xthreads')
    lib_args += '-DXTHREADS'
    # This define is not in libXau specific code, but is part of the xproto header
    # This may be only required by HP-UX.
@@ -83,7 +97,7 @@ index 5819c49..c9b9447 100644
    endif
    if host_machine.system() == 'sunos'
      lib_args += ['-D_REENETRANT', '-D_POSIX_PTHREAD_SEMANTICS']
-@@ -61,6 +67,7 @@ lib = library(
+@@ -61,6 +74,7 @@ lib = library(
    dependencies : dep_xproto,
    version : '6.0.0',
    install : true,
@@ -91,7 +105,7 @@ index 5819c49..c9b9447 100644
  )
  
  test(
-@@ -94,4 +101,6 @@ pkg.generate(
+@@ -94,4 +108,6 @@ pkg.generate(
    requires : 'xproto',
  )
  

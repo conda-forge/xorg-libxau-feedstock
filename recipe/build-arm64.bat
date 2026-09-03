@@ -1,7 +1,5 @@
 @echo on
 
-set "PKG_CONFIG=%BUILD_PREFIX%\Library\usr\bin\pkg-config.exe"
-
 meson setup builddir %MESON_ARGS% --wrap-mode=nofallback --default-library=shared
 if errorlevel 1 exit /b 1
 
