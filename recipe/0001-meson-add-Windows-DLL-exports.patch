@@ -106,11 +106,3 @@ index dc0c34b..4842c1f 100644
  )
  
  test(
-@@ -94,4 +109,6 @@ pkg.generate(
-   requires : 'xproto',
- )
- 
--subdir('man')
-+if host_machine.system() != 'windows'
-+  subdir('man')
-+endif

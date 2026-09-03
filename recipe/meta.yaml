@@ -16,7 +16,7 @@ source:
     - 0001-meson-add-Windows-DLL-exports.patch  # [target_platform == "win-arm64"]
 
 build:
-  number: 3
+  number: 2
   script: call "%RECIPE_DIR%\build-arm64.bat"  # [target_platform == "win-arm64"]
   detect_binary_files_with_prefix: true
   run_exports:
@@ -37,6 +37,7 @@ requirements:
     - {{ stdlib("m2w64_c") }}       # [win and target_platform != "win-arm64"]
     - meson                          # [target_platform == "win-arm64"]
     - ninja                          # [target_platform == "win-arm64"]
+    - m2-sed                         # [target_platform == "win-arm64"]
     - make                           # [target_platform != "win-arm64"]
     - gettext                       # [unix]
   host:
@@ -66,6 +67,10 @@ test:
     - test_xau.exe  # [target_platform == "win-arm64"]
     - dumpbin /headers test_xau.exe | findstr /I /C:"AA64 machine (ARM64)"  # [target_platform == "win-arm64"]
     - dumpbin /headers "%LIBRARY_BIN%\Xau-6.dll" | findstr /I /C:"AA64 machine (ARM64)"  # [target_platform == "win-arm64"]
+    {% set manpages = [ "Xau", "XauDisposeAuth", "XauFileName", "XauGetAuthByAddr", "XauGetBestAuthByAddr", "XauLockAuth", "XauReadAuth", "XauUnlockAuth", "XauWriteAuth" ] %}
+    {% for manpage in manpages %}
+    - if not exist "%LIBRARY_PREFIX%\share\man\man3\{{ manpage }}.3" exit /b 1  # [target_platform == "win-arm64"]
+    {% endfor %}
     {% set exports = [ "XauDisposeAuth", "XauFileName", "XauGetAuthByAddr", "XauGetBestAuthByAddr", "XauLockAuth", "XauReadAuth", "XauUnlockAuth", "XauWriteAuth" ] %}
     {% for export in exports %}
     - dumpbin /exports "%LIBRARY_BIN%\Xau-6.dll" | findstr /C:"{{ export }}"  # [target_platform == "win-arm64"]
