@@ -17,7 +17,7 @@ source:
 
 build:
   number: 3
-  script: build-arm64.bat  # [target_platform == "win-arm64"]
+  script: call "%RECIPE_DIR%\build-arm64.bat"  # [target_platform == "win-arm64"]
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage(name|lower) }}
