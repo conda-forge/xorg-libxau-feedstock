@@ -1,3 +1,5 @@
+# win-arm64 uses Meson, while the other platforms still use Autotools.
+# Ideally, all platforms should migrate to the upstream Meson build.
 {% set xorg_name = "libXau" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
@@ -12,40 +14,68 @@ package:
 source:
   url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
+  patches:
+    - 0001-meson-add-Windows-DLL-exports.patch  # [target_platform == "win-arm64"]
 
 build:
   number: 2
+  script: call "%RECIPE_DIR%\build-arm64.bat"  # [target_platform == "win-arm64"]
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage(name|lower) }}
 
 requirements:
   build:
-    - m2-autoconf                   # [win]
-    - m2-automake{{ am_version }}   # [win]
-    - m2-libtool                    # [win]
-    - m2-pkg-config                 # [win]
+    - m2-autoconf                   # [win and target_platform != "win-arm64"]
+    - m2-automake{{ am_version }}   # [win and target_platform != "win-arm64"]
+    - m2-libtool                    # [win and target_platform != "win-arm64"]
+    - m2-pkg-config                 # [win and target_platform != "win-arm64"]
     - pkg-config                    # [not win]
-    - m2-base                       # [win]
+    - m2-base                       # [win and target_platform != "win-arm64"]
     - gnuconfig  # [unix]
-    - {{ compiler("c") }}           # [unix]
-    - {{ stdlib("c") }}             # [unix]
-    - {{ compiler("m2w64_c") }}     # [win]
-    - {{ stdlib("m2w64_c") }}       # [win]
-    - make
+    - {{ compiler("c") }}           # [unix or target_platform == "win-arm64"]
+    - {{ stdlib("c") }}             # [unix or target_platform == "win-arm64"]
+    - {{ compiler("m2w64_c") }}     # [win and target_platform != "win-arm64"]
+    - {{ stdlib("m2w64_c") }}       # [win and target_platform != "win-arm64"]
+    - meson                          # [target_platform == "win-arm64"]
+    - ninja                          # [target_platform == "win-arm64"]
+    - m2-sed                         # [target_platform == "win-arm64"]
+    - make                           # [target_platform != "win-arm64"]
     - gettext                       # [unix]
   host:
-    - xorg-util-macros
+    - xorg-util-macros              # [target_platform != "win-arm64"]
     - xorg-xorgproto
 
 test:
+  requires:
+    - {{ compiler("c") }}  # [target_platform == "win-arm64"]
+    - xorg-xorgproto       # [target_platform == "win-arm64"]
+  files:
+    - test_xau.c  # [target_platform == "win-arm64"]
   commands:
     {% set lib_idents = [ "Xau" ] %}
     {% for lib_ident in lib_idents %}
     - test -f $PREFIX/lib/lib{{ lib_ident }}.dylib  # [osx]
     - test -f $PREFIX/lib/lib{{ lib_ident }}.so  # [linux]
-    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win]
-    - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win]
+    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win and target_platform != "win-arm64"]
+    - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win and target_platform != "win-arm64"]
+    {% endfor %}
+    - if not exist "%LIBRARY_INC%\X11\Xauth.h" exit /b 1  # [target_platform == "win-arm64"]
+    - if not exist "%LIBRARY_LIB%\Xau.lib" exit /b 1  # [target_platform == "win-arm64"]
+    - if not exist "%LIBRARY_LIB%\pkgconfig\xau.pc" exit /b 1  # [target_platform == "win-arm64"]
+    - if not exist "%LIBRARY_BIN%\Xau-6.dll" exit /b 1  # [target_platform == "win-arm64"]
+    - call %CC% /nologo /MD /W4 /I"%LIBRARY_INC%" test_xau.c /link /LIBPATH:"%LIBRARY_LIB%" Xau.lib /OUT:test_xau.exe  # [target_platform == "win-arm64"]
+    - dumpbin /imports test_xau.exe | findstr /I /C:"Xau-6.dll"  # [target_platform == "win-arm64"]
+    - test_xau.exe  # [target_platform == "win-arm64"]
+    - dumpbin /headers test_xau.exe | findstr /I /C:"AA64 machine (ARM64)"  # [target_platform == "win-arm64"]
+    - dumpbin /headers "%LIBRARY_BIN%\Xau-6.dll" | findstr /I /C:"AA64 machine (ARM64)"  # [target_platform == "win-arm64"]
+    {% set manpages = [ "Xau", "XauDisposeAuth", "XauFileName", "XauGetAuthByAddr", "XauGetBestAuthByAddr", "XauLockAuth", "XauReadAuth", "XauUnlockAuth", "XauWriteAuth" ] %}
+    {% for manpage in manpages %}
+    - if not exist "%LIBRARY_PREFIX%\share\man\man3\{{ manpage }}.3" exit /b 1  # [target_platform == "win-arm64"]
+    {% endfor %}
+    {% set exports = [ "XauDisposeAuth", "XauFileName", "XauGetAuthByAddr", "XauGetBestAuthByAddr", "XauLockAuth", "XauReadAuth", "XauUnlockAuth", "XauWriteAuth" ] %}
+    {% for export in exports %}
+    - dumpbin /exports "%LIBRARY_BIN%\Xau-6.dll" | findstr /C:"{{ export }}"  # [target_platform == "win-arm64"]
     {% endfor %}
 
 about:
